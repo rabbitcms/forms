@@ -1,0 +1,21 @@
+{
+  "name": "rabbitcms/forms",
+  "description": "Form support for RabbitCMS",
+  "type": "laravel-library",
+  "require": {
+    "composer/installers": "^1.1",
+    "laravel/framework": "^5.2 | ^5.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "RabbitCMS\\Forms\\": "src/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dmytro Kulyk",
+      "email": "lnkvisitor.ts@gmail.com"
+    }
+  ]
+}
