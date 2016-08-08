@@ -2,9 +2,7 @@
 
 namespace RabbitCMS\Forms;
 
-use Iterator;
-
-class Form implements Iterator
+class Form extends ControlCollection
 {
     const METHOD_POST = 'POST';
     const METHOD_GET  = 'GET';
@@ -17,8 +15,6 @@ class Form implements Iterator
     protected $method;
 
     protected $encType;
-
-    protected $controls = [];
 
     /**
      * Form constructor.
@@ -92,59 +88,5 @@ class Form implements Iterator
     public function setMethod(string $method)
     {
         $this->method = $method;
-    }
-
-    /**
-     * Add controls to form.
-     *
-     * @param Control[] ...$controls
-     */
-    public function addControl(Control ...$controls)
-    {
-        foreach ($controls as $control) {
-            $control->setForm($this);
-            $this->controls[] = $control;
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function next()
-    {
-        next($this->controls);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function key()
-    {
-        return key($this->controls);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function valid()
-    {
-        return $this->current() !== null;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return Control
-     */
-    public function current()
-    {
-        return current($this->controls) ?: null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rewind()
-    {
-        reset($this->controls);
     }
 }
