@@ -12,6 +12,14 @@ class Input extends Control
 
     protected $type = self::TYPE_TEXT;
 
+    public function __construct($name, $value = '', array $options = [])
+    {
+        parent::__construct($name, $value, $options);
+        if (array_key_exists('type', $options)) {
+            $this->setType($options['type']);
+        }
+    }
+
     /**
      * Get input type.
      *

@@ -3,6 +3,7 @@
   "description": "Form support for RabbitCMS",
   "type": "laravel-library",
   "require": {
+    "rabbitcms/carrot": ">=0.2.3",
     "composer/installers": "^1.1",
     "laravel/framework": "^5.2 | ^5.3"
   },

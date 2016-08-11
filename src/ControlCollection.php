@@ -17,6 +17,21 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     protected $controls = [];
 
     /**
+     * ControlCollection constructor.
+     *
+     * @param array $controls
+     */
+    public function __construct(array $controls = [])
+    {
+        foreach ($controls as $name => $control) {
+            if (!$control instanceof Control) {
+                $control = Control::make($name, $control);
+            }
+            $this->addControl($control);
+        }
+    }
+
+    /**
      * Add controls to form.
      *
      * @param Control[] ...$controls
