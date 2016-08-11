@@ -45,6 +45,24 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     }
 
     /**
+     * Validation rules
+     *
+     * @return array
+     */
+    public function validationRules():array
+    {
+        $rules = [];
+
+        foreach ($this as $control) {
+            $rule = $control->getRule();
+            if (!empty($rule)) {
+                $rules[$control->getName()] = $control->getRule();
+            }
+        }
+        return $rules;
+    }
+
+    /**
      * @inheritdoc
      */
     public function next()

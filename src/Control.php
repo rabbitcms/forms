@@ -11,24 +11,46 @@ use ReflectionClass;
 abstract class Control implements JsonSerializable
 {
     /**
+     * Element name.
+     *
      * @var string
      */
     protected $name;
 
     /**
+     * Element default value.
+     *
      * @var mixed
      */
     protected $value;
 
     /**
+     * Element classes.
+     *
      * @var array|string[]
      */
     protected $classes = [];
 
     /**
+     * Element validation rule.
+     *
      * @var string
      */
     protected $rule;
+
+    /**
+     * Element validation messages.
+     *
+     * @var array
+     */
+    protected $messages = [];
+
+    /**
+     * Element label name.
+     *
+     * @var array
+     */
+    protected $label;
 
     /**
      * @var Form
@@ -53,40 +75,6 @@ abstract class Control implements JsonSerializable
     }
 
     /**
-     * Set control options.
-     *
-     * @param array $options
-     */
-    public function setOptions(array $options)
-    {
-        if (array_key_exists('name', $options)) {
-            $this->addClasses($options['name']);
-        }
-
-        if (array_key_exists('classes', $options)) {
-            $this->addClasses(...(array)$options['classes']);
-        }
-
-        if (array_key_exists('rule', $options)) {
-            $this->setRule($options['rule']);
-        }
-
-        if (array_key_exists('value', $options)) {
-            $this->setValue($options['value']);
-        }
-    }
-
-    /**
-     * Add classes to control.
-     *
-     * @param \string[] ...$classes
-     */
-    public function addClasses(string ...$classes)
-    {
-        $this->classes = array_unique(array_merge($this->classes, $classes));
-    }
-
-    /**
      * Make control.
      *
      * @param string $name
@@ -104,6 +92,16 @@ abstract class Control implements JsonSerializable
         $instance->setOptions($options);
 
         return $instance;
+    }
+
+    /**
+     * Add classes to control.
+     *
+     * @param \string[] ...$classes
+     */
+    public function addClasses(string ...$classes)
+    {
+        $this->classes = array_unique(array_merge($this->classes, $classes));
     }
 
     /**
@@ -179,6 +177,80 @@ abstract class Control implements JsonSerializable
     }
 
     /**
+     * @return array
+     */
+    public function getLabel(): array
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param array $label
+     */
+    public function setLabel(array $label)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @param array $messages
+     */
+    public function setMessages(array $messages)
+    {
+        $this->messages = $messages;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set control options.
+     *
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        if (array_key_exists('name', $options)) {
+            $this->setName($options['name']);
+        }
+
+        if (array_key_exists('classes', $options)) {
+            $this->addClasses(...(array)$options['classes']);
+        }
+
+        if (array_key_exists('rule', $options)) {
+            $this->setRule($options['rule']);
+        }
+
+        if (array_key_exists('value', $options)) {
+            $this->setValue($options['value']);
+        }
+
+        if (array_key_exists('messages', $options)) {
+            $this->setMessages($options['messages']);
+        }
+
+        if (array_key_exists('label', $options)) {
+            $this->setLabel($options['label']);
+        }
+
+        $this->options = $options;
+    }
+
+    /**
      * @inheritdoc
      */
     public function jsonSerialize()
@@ -186,10 +258,13 @@ abstract class Control implements JsonSerializable
         return array_merge(
             $this->options,
             [
-                'name'    => $this->name,
-                'rule'    => $this->rule,
-                'classes' => $this->classes,
-                'value'   => $this->value,
+                'class'    => static::class,
+                'name'     => $this->name,
+                'rule'     => $this->rule,
+                'classes'  => $this->classes,
+                'value'    => $this->value,
+                'label'    => $this->label,
+                'messages' => $this->messages,
             ]
         );
     }

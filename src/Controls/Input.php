@@ -3,6 +3,9 @@ namespace RabbitCMS\Forms\Controls;
 
 use RabbitCMS\Forms\Control;
 
+/**
+ * Class Input.
+ */
 class Input extends Control
 {
     const TYPE_TEXT     = 'text';
@@ -10,6 +13,11 @@ class Input extends Control
     const TYPE_CHECKBOX = 'checkbox';
     const TYPE_RADIO    = 'radio';
 
+    /**
+     * Input type.
+     *
+     * @var string
+     */
     protected $type = self::TYPE_TEXT;
 
     /**
