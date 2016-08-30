@@ -48,7 +48,7 @@ abstract class Control implements JsonSerializable
     /**
      * Element label name.
      *
-     * @var array
+     * @var string
      */
     protected $label;
 
@@ -177,17 +177,17 @@ abstract class Control implements JsonSerializable
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getLabel(): array
+    public function getLabel(): string
     {
         return $this->label;
     }
 
     /**
-     * @param array $label
+     * @param string $label
      */
-    public function setLabel(array $label)
+    public function setLabel(string $label)
     {
         $this->label = $label;
     }
