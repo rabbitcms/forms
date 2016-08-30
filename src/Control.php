@@ -117,9 +117,9 @@ abstract class Control implements JsonSerializable
     /**
      * Set control form.
      *
-     * @param Form|null $form
+     * @param ControlCollection|null $form
      */
-    public function setForm(Form $form = null)
+    public function setForm(ControlCollection $form = null)
     {
         $this->form = $form;
     }
