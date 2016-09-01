@@ -17,6 +17,11 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     protected $controls = [];
 
     /**
+     * @var string
+     */
+    protected $name = '';
+
+    /**
      * ControlCollection constructor.
      *
      * @param array $controls
@@ -29,6 +34,22 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
             }
             $this->addControl($control);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -59,6 +80,7 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
                 $rules[$control->getName()] = $control->getRule();
             }
         }
+
         return $rules;
     }
 
@@ -128,5 +150,19 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     public function all()
     {
         return $this->controls;
+    }
+
+    public function getValues(array $values, array $old = [])
+    {
+        $result = $old;
+
+        foreach ($this->controls as $control) {
+            $name = $control->getName();
+            if (array_key_exists($name, $values)) {
+                $result[$name] = $control->getValue($values[$name], $old[$name] ?? '');
+            }
+        }
+
+        return $result;
     }
 }

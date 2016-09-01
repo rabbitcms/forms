@@ -1,6 +1,8 @@
 <?php
 namespace RabbitCMS\Forms\Controls;
 
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 use RabbitCMS\Forms\Control;
 
 /**
@@ -50,5 +52,20 @@ class Input extends Control
     public function setType(string $type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function render($value) :Htmlable
+    {
+        $prefix = $this->form->getName();
+        if ($prefix) {
+            $name = $prefix . '[' . $this->getName() . ']';
+        } else {
+            $name = $this->getName();
+        }
+
+        return new HtmlString('<input type="' . $this->getType() . '" class="form-control '. implode(' ', $this->classes) .'" name="' . $name. '" value="'. e($value) .'" >');
     }
 }

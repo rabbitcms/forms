@@ -2,6 +2,7 @@
 
 namespace RabbitCMS\Forms;
 
+use Illuminate\Contracts\Support\Htmlable;
 use JsonSerializable;
 use ReflectionClass;
 
@@ -141,19 +142,14 @@ abstract class Control implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @param mixed $new
+     * @param mixed $old
+     *
+     * @return mixed
      */
-    public function getValue(): string
+    public function getValue($new, $old)
     {
-        return $this->value;
-    }
-
-    /**
-     * @param string $value
-     */
-    public function setValue(string $value)
-    {
-        $this->value = $value;
+        return $new;
     }
 
     /**
@@ -268,4 +264,11 @@ abstract class Control implements JsonSerializable
             ]
         );
     }
+
+    /**
+     * @param mixed $value
+     *
+     * @return Htmlable
+     */
+    abstract public function render($value) :Htmlable;
 }
