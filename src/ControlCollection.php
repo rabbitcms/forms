@@ -37,6 +37,23 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     }
 
     /**
+     * Add controls to form.
+     *
+     * @param Control[] ...$controls
+     *
+     * @return static
+     */
+    public function addControl(Control ...$controls)
+    {
+        foreach ($controls as $control) {
+            $control->setForm($this);
+            $this->controls[] = $control;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -50,19 +67,6 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     public function setName(string $name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * Add controls to form.
-     *
-     * @param Control[] ...$controls
-     */
-    public function addControl(Control ...$controls)
-    {
-        foreach ($controls as $control) {
-            $control->setForm($this);
-            $this->controls[] = $control;
-        }
     }
 
     /**
