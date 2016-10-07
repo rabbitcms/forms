@@ -231,9 +231,9 @@ abstract class Control implements JsonSerializable
             $this->setRule($options['rule']);
         }
 
-        if (array_key_exists('value', $options)) {
+        /*if (array_key_exists('value', $options)) {
             $this->setValue($options['value']);
-        }
+        }*/
 
         if (array_key_exists('messages', $options)) {
             $this->setMessages($options['messages']);
