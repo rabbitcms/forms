@@ -66,6 +66,13 @@ class Input extends Control
             $name = $this->getName();
         }
 
-        return new HtmlString('<input type="' . $this->getType() . '" class="form-control '. implode(' ', $this->classes) .'" name="' . $name. '" value="'. e($value) .'" >');
+        $attributes = '';
+        foreach ($this->attributes as $key => $val) {
+            $attributes .= $key . '="' . $val . '" ';
+        }
+
+        return new HtmlString(
+            '<input type="' . $this->getType() . '" class="form-control ' . implode(' ', $this->classes) . '" ' . $attributes . ' name="' . $name . '" value="' . e($value) . '" >'
+        );
     }
 }

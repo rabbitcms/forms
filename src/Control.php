@@ -33,6 +33,13 @@ abstract class Control implements JsonSerializable
     protected $classes = [];
 
     /**
+     * Element attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
      * Element validation rule.
      *
      * @var string
@@ -106,6 +113,14 @@ abstract class Control implements JsonSerializable
     }
 
     /**
+     * @param array $attributes
+     */
+    public function addAttributes(array $attributes)
+    {
+        $this->attributes = array_unique(array_merge($this->attributes, $attributes));
+    }
+
+    /**
      * Get control form.
      *
      * @return Form
@@ -150,6 +165,22 @@ abstract class Control implements JsonSerializable
     public function getValue($new, $old)
     {
         return $new;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue(string $value)
+    {
+        $this->value = $value;
     }
 
     /**
@@ -231,9 +262,9 @@ abstract class Control implements JsonSerializable
             $this->setRule($options['rule']);
         }
 
-        /*if (array_key_exists('value', $options)) {
+        if (array_key_exists('value', $options)) {
             $this->setValue($options['value']);
-        }*/
+        }
 
         if (array_key_exists('messages', $options)) {
             $this->setMessages($options['messages']);
@@ -241,6 +272,10 @@ abstract class Control implements JsonSerializable
 
         if (array_key_exists('label', $options)) {
             $this->setLabel($options['label']);
+        }
+
+        if (array_key_exists('attributes', $options)) {
+            $this->addAttributes((array)$options['attributes']);
         }
 
         $this->options = $options;
@@ -260,7 +295,7 @@ abstract class Control implements JsonSerializable
                 'classes'  => $this->classes,
                 'value'    => $this->value,
                 'label'    => $this->label,
-                'messages' => $this->messages,
+                'messages' => $this->messages
             ]
         );
     }
