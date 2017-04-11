@@ -196,9 +196,9 @@ abstract class Control implements JsonSerializable
     /**
      * Set validation rule.
      *
-     * @param string|null $rule
+     * @param string|array|null $rule
      */
-    public function setRule(string $rule = null)
+    public function setRule($rule = null)
     {
         $this->rule = $rule;
     }
