@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace RabbitCMS\Forms\Controls;
 
@@ -14,7 +15,7 @@ class Select extends Control
     /**
      * @inheritdoc
      */
-    public function render($value) :Htmlable
+    public function render($value): Htmlable
     {
         $prefix = $this->form->getName();
         if ($prefix) {
@@ -27,17 +28,31 @@ class Select extends Control
         foreach ($this->attributes as $key => $val) {
             $attributes .= $key . '="' . $val . '" ';
         }
+        $classes = implode(' ', $this->classes);
 
         return new HtmlString(
-            '<select class="form-control ' . implode(' ', $this->classes) . '" ' . $attributes . ' name="' . $name . '">' . $this->renderItems($this->options['items'], $value) . '</select>'
+            <<<HTML
+<select class="form-control {$classes}" {$attributes} 
+  name="{$name}">{$this->renderItems($this->options['items'], $value)}</select>
+HTML
         );
     }
 
-    protected function renderItems(array $items, string $selected) :Htmlable
+    /**
+     * @param array  $items
+     * @param string $current
+     *
+     * @return Htmlable
+     */
+    protected function renderItems(array $items, string $current): Htmlable
     {
         $options = '';
         foreach ($items as $value => $text) {
-            $options .= '<option value="' . $value . '"' . ($value === $selected ? ' selected' : '') . '>' . e($text) . '</option>';
+            $selected = (string)$value === $current ? 'selected' : '';
+            $text = e($text);
+            $options .= <<<HTML
+<option value="{$value}" {$selected}>{$text}</option>
+HTML;
         }
 
         return new HtmlString($options);
