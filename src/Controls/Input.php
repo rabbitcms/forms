@@ -25,13 +25,15 @@ class Input extends Control
     /**
      * @inheritdoc
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): Control
     {
         parent::setOptions($options);
 
         if (array_key_exists('type', $options)) {
             $this->setType($options['type']);
         }
+
+        return $this;
     }
 
     /**

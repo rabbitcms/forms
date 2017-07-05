@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace RabbitCMS\Forms;
 
@@ -24,6 +25,13 @@ abstract class Control implements JsonSerializable
      * @var mixed
      */
     protected $value;
+
+    /**
+     * Element group.
+     *
+     * @var string
+     */
+    protected $group;
 
     /**
      * Element classes.
@@ -86,11 +94,13 @@ abstract class Control implements JsonSerializable
      * Make control.
      *
      * @param string $name
-     * @param array  $options
+     * @param array $options
      *
      * @return Control
+     *
+     * @throws \ReflectionException
      */
-    public static function make($name, array $options = []):self
+    public static function make($name, array $options = []): self
     {
         $class = new ReflectionClass($options['class'] ?? static::class);
 
@@ -103,21 +113,27 @@ abstract class Control implements JsonSerializable
     }
 
     /**
-     * Add classes to control.
+     * @param string[] ...$classes
      *
-     * @param \string[] ...$classes
+     * @return Control
      */
-    public function addClasses(string ...$classes)
+    public function addClasses(string ...$classes): self
     {
         $this->classes = array_unique(array_merge($this->classes, $classes));
+
+        return $this;
     }
 
     /**
      * @param array $attributes
+     *
+     * @return Control
      */
-    public function addAttributes(array $attributes)
+    public function addAttributes(array $attributes): self
     {
         $this->attributes = array_unique(array_merge($this->attributes, $attributes));
+
+        return $this;
     }
 
     /**
@@ -134,10 +150,34 @@ abstract class Control implements JsonSerializable
      * Set control form.
      *
      * @param ControlCollection|null $form
+     *
+     * @return Control
      */
-    public function setForm(ControlCollection $form = null)
+    public function setForm(ControlCollection $form = null): self
     {
         $this->form = $form;
+
+        return $this;
+    }
+
+    /**
+     * @param string $group
+     *
+     * @return Control
+     */
+    public function setGroup(string $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup(): string
+    {
+        return $this->group;
     }
 
     /**
@@ -150,10 +190,14 @@ abstract class Control implements JsonSerializable
 
     /**
      * @param string $name
+     *
+     * @return Control
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -177,10 +221,14 @@ abstract class Control implements JsonSerializable
 
     /**
      * @param string $value
+     *
+     * @return Control
      */
-    public function setValue(string $value)
+    public function setValue(string $value): self
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**
@@ -197,10 +245,14 @@ abstract class Control implements JsonSerializable
      * Set validation rule.
      *
      * @param string|array|null $rule
+     *
+     * @return Control
      */
-    public function setRule($rule = null)
+    public function setRule($rule = null): self
     {
         $this->rule = $rule;
+
+        return $this;
     }
 
     /**
@@ -213,10 +265,14 @@ abstract class Control implements JsonSerializable
 
     /**
      * @param string $label
+     *
+     * @return Control
      */
-    public function setLabel(string $label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
     }
 
     /**
@@ -229,10 +285,14 @@ abstract class Control implements JsonSerializable
 
     /**
      * @param array $messages
+     *
+     * @return Control
      */
-    public function setMessages(array $messages)
+    public function setMessages(array $messages): self
     {
         $this->messages = $messages;
+
+        return $this;
     }
 
     /**
@@ -247,8 +307,10 @@ abstract class Control implements JsonSerializable
      * Set control options.
      *
      * @param array $options
+     *
+     * @return Control
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): Control
     {
         if (array_key_exists('name', $options)) {
             $this->setName($options['name']);
@@ -278,7 +340,15 @@ abstract class Control implements JsonSerializable
             $this->addAttributes((array)$options['attributes']);
         }
 
+        if (array_key_exists('group', $options)) {
+            $this->setGroup($options['group']);
+        } else {
+            $this->setGroup('*');
+        }
+
         $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -305,5 +375,5 @@ abstract class Control implements JsonSerializable
      *
      * @return Htmlable
      */
-    abstract public function render($value) :Htmlable;
+    abstract public function render($value): Htmlable;
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace RabbitCMS\Forms;
 
@@ -17,6 +18,11 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     protected $controls = [];
 
     /**
+     * @var array
+     */
+    protected $groups = [];
+
+    /**
      * @var string
      */
     protected $name = '';
@@ -25,9 +31,13 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
      * ControlCollection constructor.
      *
      * @param array $controls
+     *
+     * @throws \ReflectionException
      */
     public function __construct(array $controls = [])
     {
+        $this->addGroup('*', 'Other', -1);
+
         foreach ($controls as $name => $control) {
             if (!$control instanceof Control) {
                 $control = Control::make($name, $control);
@@ -41,9 +51,9 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
      *
      * @param Control[] ...$controls
      *
-     * @return static
+     * @return ControlCollection
      */
-    public function addControl(Control ...$controls)
+    public function addControl(Control ...$controls): ControlCollection
     {
         foreach ($controls as $control) {
             $control->setForm($this);
@@ -63,10 +73,14 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
 
     /**
      * @param string $name
+     *
+     * @return ControlCollection
      */
-    public function setName(string $name)
+    public function setName(string $name): ControlCollection
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -107,14 +121,15 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     /**
      * @inheritdoc
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->current() !== null;
     }
 
     /**
      * {@inheritdoc}
-     * @return Control
+     *
+     * @return Control|null
      */
     public function current()
     {
@@ -132,16 +147,17 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     /**
      * @inheritdoc
      */
-    public function count()
+    public function count(): int
     {
         return count($this->controls);
     }
 
     /**
      * {@inheritdoc}
+     *
      * @return array|Control[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->controls;
     }
@@ -151,12 +167,18 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
      *
      * @return array|Control[]
      */
-    public function all()
+    public function all(): array
     {
         return $this->controls;
     }
 
-    public function getValues(array $values, array $old = [])
+    /**
+     * @param array $values
+     * @param array $old
+     *
+     * @return array
+     */
+    public function getValues(array $values, array $old = []): array
     {
         $result = $old;
 
@@ -168,5 +190,41 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param int $priority
+     *
+     * @return ControlCollection
+     */
+    public function addGroup($name, $label, $priority = 0): ControlCollection
+    {
+        $this->groups[$name] = compact('label', 'priority');
+
+        return $this;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getGroups(): array
+    {
+        return collect($this->groups)
+            ->sortByDesc('priority')
+            ->toArray();
+    }
+
+    /**
+     * @param string $group
+     *
+     * @return array
+     */
+    public function getGroupControls(string $group): array
+    {
+        return array_filter($this->controls, function (Control $control) use ($group) {
+            return $control->getGroup() === $group;
+        });
     }
 }

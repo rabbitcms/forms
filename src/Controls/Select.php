@@ -44,7 +44,7 @@ HTML
      *
      * @return Htmlable
      */
-    protected function renderItems(array $items, string $current): Htmlable
+    protected function renderItems(array $items, $current): Htmlable
     {
         $options = '';
         foreach ($items as $value => $text) {
