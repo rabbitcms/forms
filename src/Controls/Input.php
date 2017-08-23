@@ -74,7 +74,9 @@ class Input extends Control
         }
 
         return new HtmlString(
-            '<input type="' . $this->getType() . '" class="form-control ' . implode(' ', $this->classes) . '" ' . $attributes . ' name="' . $name . '" value="' . e($value) . '" >'
+            '<input type="' . $this->getType() . '" class="form-control ' . implode(' ', $this->classes) . '" ' .
+            $attributes . ' name="' . $name . '" value="' . e($value) . '" ' .
+            ($this instanceof Password ? 'autocomplete="new-password"' : '') . '>'
         );
     }
 }
