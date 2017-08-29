@@ -227,4 +227,27 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
             return $control->getGroup() === $group;
         });
     }
+
+    /**
+     * @param $name
+     * @param null $type
+     *
+     * @return mixed|null|Control
+     */
+    public function getControlByName($name, $type = null)
+    {
+        foreach ($this->controls as $control) {
+            if ($type !== null) {
+                if ($control instanceof $type && $control->getName() === $name) {
+                    return $control;
+                }
+            } else {
+                if ($control->getName() === $name) {
+                    return $control;
+                }
+            }
+        }
+
+        return null;
+    }
 }

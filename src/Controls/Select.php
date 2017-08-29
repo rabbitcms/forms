@@ -57,4 +57,12 @@ HTML;
 
         return new HtmlString($options);
     }
+
+    /**
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->options['items'] ?? [];
+    }
 }
