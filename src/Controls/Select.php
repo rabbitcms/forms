@@ -12,6 +12,23 @@ use RabbitCMS\Forms\Control;
  */
 class Select extends Control
 {
+    protected $multiple = false;
+
+    /**
+     * Select constructor.
+     *
+     * @param string $name
+     * @param array $options
+     */
+    public function __construct(string $name, array $options = [])
+    {
+        parent::__construct($name, $options);
+
+        if (array_key_exists('multiple', $options['attributes'] ?? [])) {
+            $this->multiple = true;
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -22,6 +39,10 @@ class Select extends Control
             $name = $prefix . '[' . $this->getName() . ']';
         } else {
             $name = $this->getName();
+        }
+
+        if ($this->multiple) {
+            $name .= '[]';
         }
 
         $attributes = '';
@@ -48,7 +69,8 @@ HTML
     {
         $options = '';
         foreach ($items as $value => $text) {
-            $selected = (string)$value === $current ? 'selected' : '';
+            $selected = (($this->multiple && \in_array($value, (array)$current)) || (string)$value === $current)
+                ? 'selected' : '';
             $text = e($text);
             $options .= <<<HTML
 <option value="{$value}" {$selected}>{$text}</option>
