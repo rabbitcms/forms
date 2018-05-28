@@ -69,8 +69,11 @@ HTML
     {
         $options = '';
         foreach ($items as $value => $text) {
-            $selected = (($this->multiple && \in_array($value, (array)$current)) || (string)$value === (string)$current)
-                ? 'selected' : '';
+            if ($this->multiple) {
+                $selected = \in_array($value, (array)$current) ? 'selected' : '';
+            } else {
+                $selected = (string)$value === (string)$current ? 'selected' : '';
+            }
             $text = e($text);
             $options .= <<<HTML
 <option value="{$value}" {$selected}>{$text}</option>
