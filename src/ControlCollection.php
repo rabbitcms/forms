@@ -57,7 +57,7 @@ class ControlCollection implements Iterator, Countable, JsonSerializable
     {
         foreach ($controls as $control) {
             $control->setForm($this);
-            $this->controls[] = $control;
+            $this->controls[$control->getName()] = $control;
         }
 
         return $this;
