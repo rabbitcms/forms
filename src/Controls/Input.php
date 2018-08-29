@@ -23,6 +23,11 @@ class Input extends Control
     protected $type = self::TYPE_TEXT;
 
     /**
+     * @var \Closure|null
+     */
+    protected $renderer = null;
+
+    /**
      * @inheritdoc
      */
     public function setOptions(array $options): Control
