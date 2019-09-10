@@ -2,8 +2,7 @@
   "name": "rabbitcms/forms",
   "description": "Form support for RabbitCMS",
   "require": {
-    "rabbitcms/carrot": "^0.2 | ^0.3",
-    "laravel/framework": "^5.2 | ^5.3"
+    "rabbitcms/carrot": "^0.2 | ^0.3"
   },
   "autoload": {
     "psr-4": {
